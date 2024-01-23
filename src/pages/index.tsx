@@ -22,6 +22,9 @@ export default function HomePage() {
   const transformX = useRef(0)
   const transformY = useRef(0)
 
+  function onMouseLeave(){
+    setMouseDown(false)
+  }
   function onMouseDown(e:any){
     setMouseDown(true)
     console.log('鼠标按下',e.nativeEvent)
@@ -30,8 +33,24 @@ export default function HomePage() {
   }
   function onMouseMove(e:any){
     if (mouseDown){
-      console.log('鼠标按下移动X',e.nativeEvent.pageX - mouseDownPageX.current)
-      console.log('鼠标按下移动Y',e.nativeEvent.pageY - mouseDownPageY.current)
+      // console.log('鼠标按下移动X',e.nativeEvent.pageX - mouseDownPageX.current)
+      // console.log('鼠标按下移动Y',e.nativeEvent.pageY - mouseDownPageY.current)
+     
+      const tx = transformX.current + e.nativeEvent.pageX - mouseDownPageX.current
+      const ty = transformY.current + e.nativeEvent.pageY - mouseDownPageY.current
+      console.log('transformX',tx)
+      console.log('transformY',ty)
+
+
+
+
+
+
+
+
+
+
+
       setTransform(`translate3d(${ transformX.current + e.nativeEvent.pageX - mouseDownPageX.current}px, ${transformY.current + e.nativeEvent.pageY - mouseDownPageY.current}px, 0px)`)
     }
   }
@@ -83,10 +102,34 @@ export default function HomePage() {
     }
   }
 
+  function initSubItem(){
+    let key = 0
+    let subItem:any[] = []
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        subItem.push(<div>
+          <div id={'item_' + (key+1)} className='item1' key={'item' + key} style={{
+            width:ITEM_WIDTH,
+            height:ITEM_HEIGHT,
+            left:j * ITEM_WIDTH,
+            top:i * ITEM_HEIGHT
+          }}>
+            <div className='itemContent'>
+            {key + 1}
+            </div>
+          </div>
+        </div>)
+        key ++ 
+      }
+    }
+    return subItem
+  }
+
   return (
     <div className='productPage'>
       <div className='stage'>
         <div className='contentView'
+          id='contentView'
           style={{
             cursor:mouseDown ? 'grabbing' : 'grab',
             transform
@@ -95,20 +138,29 @@ export default function HomePage() {
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
           onWheel={onWheel}
         >
+
           {
-            new Array(160).fill('').map((item:any,index:number)=>{
-              return <div id={'item_' + (index+1)} className='item1' key={'item' + index} style={{
-                width:ITEM_WIDTH,
-                height:ITEM_HEIGHT,
-              }}>
-                <div className='itemContent'>
-                {index + 1}
-                </div>
-              </div>
-            })
+initSubItem()
           }
+
+
+          {/* {
+            new Array(10).fill('').map((item:any,index:number)=>{
+              return new Array(10).fill('').map((item:any,index:number)=>{
+                return <div id={'item_' + (index+1)} className='item1' key={'item' + index} style={{
+                  width:ITEM_WIDTH,
+                  height:ITEM_HEIGHT,
+                }}>
+                  <div className='itemContent'>
+                  {index + 1}
+                  </div>
+                </div>
+              })
+            })
+          } */}
         </div>
       </div>
     </div>
