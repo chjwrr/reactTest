@@ -20,9 +20,9 @@ export default function ProviderConfig() {
             <ModalProvider>
               <NoticeProvider>
                 <ApolloClientProvider>
-                  <Header/>
+                  {/* <Header/> */}
                   <Outlet/>
-                  <Footer/>
+                  {/* <Footer/> */}
                   <ToastContainer
                     position="top-right"
                     autoClose={5000}
